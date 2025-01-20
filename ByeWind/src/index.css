@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.dark{
+    background: rgba(0, 0, 0, 0.992);
+}
