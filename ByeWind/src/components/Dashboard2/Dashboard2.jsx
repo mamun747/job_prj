@@ -1,47 +1,20 @@
-import {
-  Breadcrumbs,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  Tooltip,
-} from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import {
   Activities,
-  Bar,
   Dot,
-  Favourites,
   Home,
   List,
   Notifications,
   Settings,
-  Sun,
 } from "../../Icons/Icon";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Dash2Data, tableData } from "../../data/data";
 import CountUp from "react-countup";
-import { BarChart, LineChart } from "@mui/x-charts";
+import { BarChart } from "@mui/x-charts";
+import Nav from "./Nav";
 
-function Dashboard2({ toggleDrawer, handleDarkMode, toggleRightbar }) {
-  const [notClose, setNotClose] = useState(false);
-  const { width } = useWindowSize();
-  function useWindowSize() {
-    const [size, setSize] = useState({ width: window.innerWidth });
-
-    useEffect(() => {
-      const handleResize = () => setSize({ width: window.innerWidth });
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    return size;
-  }
-  const handleMenuBar = () => {
-    setNotClose((prev) => !prev);
-  };
-
+function Dashboard2({ toggleDrawer, handleDarkMode }) {
   const [chartWidth, setChartWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -58,122 +31,7 @@ function Dashboard2({ toggleDrawer, handleDarkMode, toggleRightbar }) {
   return (
     <>
       <div className="col-span-4 dark:bg-[#2a2a2a]">
-        <nav className="py-5 px-2 md:px-7 border-b dark:border-b-[#FFFFFF]/15 flex justify-between items-center">
-          <div className="md:hidden">
-            <button onClick={handleMenuBar}>
-              <img src="/menus.png" className="w-7 h-7" alt="Menu" />
-            </button>
-          </div>
-          <div className="flex gap-2 items-center">
-            <div className="hidden md:flex">
-              <button disabled={width > 1024} onClick={toggleDrawer(true)}>
-                <Tooltip title="Sidebar">
-                  <IconButton>
-                    <Bar />
-                  </IconButton>
-                </Tooltip>
-              </button>
-              <Tooltip title="Favourites">
-                <IconButton>
-                  <Favourites />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <div className="hidden sm:block">
-              <Breadcrumbs aria-label="breadcrumb" dev>
-                <Link
-                  underline="none"
-                  color="inherit"
-                  href="/"
-                  className="hover:bg-slate-100 px-2 py-1 rounded-lg transition-all text-black font-medium dark:text-[#ffffff]/40"
-                >
-                  Dashboards
-                </Link>
-                <Link
-                  underline="none"
-                  color="inherit"
-                  href="/"
-                  className="hover:bg-slate-100 md:px-2 md:py-1 rounded-lg transition-all text-black dark:text-[#ffffff] font-medium"
-                >
-                  Overview
-                </Link>
-              </Breadcrumbs>
-            </div>
-          </div>
-          <div className="flex gap-5 items-center">
-            <div className="relative py-1 ps-2">
-              <input
-                type="text"
-                className="w-[160px] h-7 flex-1 rounded-lg bg-[#000000]/5 dark:bg-[#ffffff]/10 py-1 ps-8 overflow-hidden pe-9"
-                placeholder="Search"
-              />
-              <img
-                src="/Search.png"
-                className="absolute top-[11px] left-4"
-                alt="Search"
-              />
-              <img
-                src="/Text.png"
-                className="absolute top-[9px] right-2"
-                alt="Text"
-              />
-            </div>
-            <div className="hidden md:flex items-center">
-              <Tooltip title="Toggle theme">
-                <IconButton>
-                  <button onClick={handleDarkMode} id="switch">
-                    <Sun />
-                  </button>
-                </IconButton>
-              </Tooltip>
-
-              <Tooltip title="Activities">
-                <IconButton>
-                  <Activities />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Notifications">
-                <IconButton>
-                  <Notifications />
-                </IconButton>
-              </Tooltip>
-            </div>
-          </div>
-        </nav>
-        {notClose && (
-          <div className="flex flex-col gap-2 items-start bg-slate-200 dark:bg-[#ffffff]/35 rounded-br-3xl absolute top-[77px] left-0 h-[236px] w-12 shadow-lg md:hidden">
-            {/* Mobile Sidebar Items */}
-            <Tooltip title="Sidebar">
-              <IconButton>
-                <button disabled={width > 1024} onClick={toggleDrawer(true)}>
-                  <Bar />
-                </button>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Favourites">
-              <IconButton>
-                <Favourites />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Toggle theme">
-              <IconButton>
-                <button onClick={handleDarkMode}>
-                  <Sun />
-                </button>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Activities">
-              <IconButton>
-                <Activities />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Notifications">
-              <IconButton>
-                <Notifications />
-              </IconButton>
-            </Tooltip>
-          </div>
-        )}
+        <Nav toggleDrawer={toggleDrawer} handleDarkMode={handleDarkMode} />
         <div className="p-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {Dash2Data.map((data) => (
@@ -216,7 +74,12 @@ function Dashboard2({ toggleDrawer, handleDarkMode, toggleRightbar }) {
                     size="small"
                     className="dark:bg-[#ffffff]/15 rounded-md"
                   >
-                    <InputLabel id="demo-select-small-label" className="dark:text-white">Week</InputLabel>
+                    <InputLabel
+                      id="demo-select-small-label"
+                      className="dark:text-white"
+                    >
+                      Week
+                    </InputLabel>
                     <Select
                       className="border-none"
                       labelId="demo-select-small-label"
@@ -330,11 +193,15 @@ function Dashboard2({ toggleDrawer, handleDarkMode, toggleRightbar }) {
                     </div>
                     <div className="px-2 py-[2px] flex gap-2 items-center">
                       <span className="h-2 w-2 rounded-full bg-[#000000]/40"></span>
-                      <p className="text-xs md:text-sm dark:text-white">SnowUI</p>
+                      <p className="text-xs md:text-sm dark:text-white">
+                        SnowUI
+                      </p>
                     </div>
                     <div className="px-2 py-[2px] flex gap-2 items-center">
                       <span className="h-2 w-2 rounded-full bg-[#FF3B30]"></span>
-                      <p className="text-xs md:text-sm dark:text-white">Dashboard</p>
+                      <p className="text-xs md:text-sm dark:text-white">
+                        Dashboard
+                      </p>
                     </div>
                     <div className="sm:p-2 bg-[#000000]/5 dark:bg-[#464646] rounded-xl cursor-pointer">
                       <Dot />
@@ -391,13 +258,21 @@ function Dashboard2({ toggleDrawer, handleDarkMode, toggleRightbar }) {
                   </div>
                 ))}
               </div>
-              <footer className="hidden lg:block">
+              <footer className="hidden md:block">
                 <div className="flex items-center justify-between p-4">
-                  <p className="text-xs text-[#000]/40 dark:text-[#fff]/40">© 2024 SnowUI</p>
+                  <p className="text-xs text-[#000]/40 dark:text-[#fff]/40">
+                    © 2024 SnowUI
+                  </p>
                   <div className="flex gap-4 items-center">
-                    <p className="text-xs text-[#000]/40 dark:text-[#fff]/40">About</p>
-                    <p className="text-xs text-[#000]/40 dark:text-[#fff]/40">Support</p>
-                    <p className="text-xs text-[#000]/40 dark:text-[#fff]/40">Contact Us</p>
+                    <p className="text-xs text-[#000]/40 dark:text-[#fff]/40">
+                      About
+                    </p>
+                    <p className="text-xs text-[#000]/40 dark:text-[#fff]/40">
+                      Support
+                    </p>
+                    <p className="text-xs text-[#000]/40 dark:text-[#fff]/40">
+                      Contact Us
+                    </p>
                   </div>
                 </div>
               </footer>
@@ -405,7 +280,7 @@ function Dashboard2({ toggleDrawer, handleDarkMode, toggleRightbar }) {
           </div>
         </div>
       </div>
-      <div className="sm:hidden p-4 flex justify-center">
+      <div className="dark:bg-[#2a2a2a] sm:hidden p-4 flex justify-center">
         <div className="p-4 flex gap-[23.25px] items-center">
           <button>
             <Link to="/">
